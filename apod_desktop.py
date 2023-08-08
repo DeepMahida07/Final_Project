@@ -107,7 +107,7 @@ def init_apod_cache():
                 file_path TEXT, 
                 sha256 TEXT
             );
-        """    
+        """   
     cursor.execute(create_table_query)
     conn.commit()
     conn.close()   
@@ -215,7 +215,7 @@ def get_apod_id_from_db(image_sha256):
     # Query DB for image with same hash value as image in response message
     #db_cursor.execute("SELECT id FROM image_data WHERE sha256='" + image_sha256.upper() + "'")
     #db_cursor.execute("SELECT id FROM image_data WHERE sha256=?;", [image_sha256.upper()])
-    db_cursor.execute("SELECT id FROM image_data WHERE sha256=?;", (image_sha256.upper(),))
+    db_cursor.execute("SELECT id FROM image_data WHERE sha256=?;", (image_sha256.upper()))
     query_results = db_cursor.fetchone(), 
     db_cxn.close()
 
