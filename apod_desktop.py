@@ -215,8 +215,9 @@ def get_apod_id_from_db(image_sha256):
     # Query DB for image with same hash value as image in response message
     #db_cursor.execute("SELECT id FROM image_data WHERE sha256='" + image_sha256.upper() + "'")
     #db_cursor.execute("SELECT id FROM image_data WHERE sha256=?;", [image_sha256.upper()])
-    db_cursor.execute("SELECT id FROM image_data WHERE sha256=?;", (image_sha256.upper()))
-    query_results = db_cursor.fetchone(), 
+    image_sha256_query = ("SELECT id FROM image_data WHERE sha256=?")
+    db_cursor.execute(image_sha256_query, (image_sha256.upper(),))
+    query_results = db_cursor.fetchone()
     db_cxn.close()
 
     # Output message and result indicating whether image is already in the cache
@@ -288,9 +289,9 @@ def get_apod_info(image_id):
     db_cxn = sqlite3.connect(image_cache_db)
     # Add line two here
     db_cursor = db_cxn.cursor()
-    image_path_query = ('SELECT title, explanation, file_path FROM apod_images WHERE id = ?', (image_id,))
+    image_path_query = ('SELECT title, explanation, file_path FROM image_data WHERE id = ?', (image_id,))
     
-    db_cursor.execute(image_path_query)
+    db_cursor.execute(*image_path_query)
     query_result = db_cursor.fetchone()
     db_cxn.close()
 
