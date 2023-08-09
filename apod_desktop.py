@@ -20,6 +20,7 @@ import re
 import image_lib
 import apod_api
 import sys
+import urllib
 
 # Full paths of the image cache folder and database
 # - The image cache directory is a subdirectory of the specified parent directory.
@@ -43,10 +44,7 @@ def main():
     apod_info = get_apod_info(apod_id)
 
     # Set the APOD as the desktop background image
-    if apod_info is not None:
-        image_lib.set_desktop_background_image(apod_info['file_path'])
-    else:
-        return  None
+    image_lib.set_desktop_background_image(apod_info['file_path'])
 
 def get_apod_date():
     """Gets the APOD date
@@ -257,24 +255,27 @@ def determine_apod_file_path(image_title, image_url):
         str: Full path at which the APOD image file must be saved in the image cache directory
     """
     # Extract the file extension from the URL
-    file_ext = image_url.split(".")[-1]
+    #file_ext = image_url.split(".")[-1]
 
     # Remove leading and trailing spaces from the title
-    file_name = image_title.strip()
+    #file_name = image_title.strip()
 
     # Replace inner spaces with underscores
-    file_name = file_name.replace(' ', '_')
+    #file_name = file_name.replace(' ', '_')
     
     # Remove any non-word characters
-    file_name = re.sub(r'\W+', '', file_name)
+    #file_name = re.sub(r'\W+', '', file_name)
 
     # Append the extension to the file name
-    file_name = '.'.join((file_name, file_ext))
+    #file_name = '.'.join((file_name, file_ext))
     
     # Joint the directory path and file name to get the full path
-    file_path = os.path.join(image_cache_dir, file_name)
-    
-    return file_path
+    #file_path = os.path.join(image_cache_dir, file_name)
+    image_ext_url_path = os.path.splitext(urllib.parse.urlparse(image_url).path)[1]
+    img_title = re.sub(r'[^a-zA-Z0-9\s_]+', '', image_title).strip().replace(' ', '_') # image title
+    image_file_name = img_title + image_ext_url_path
+    image_file_path = os.path.join(image_cache_dir, image_file_name)
+    return image_file_path
 
 def get_apod_info(image_id):
     """Gets the title, explanation, and full path of the APOD having a specified
