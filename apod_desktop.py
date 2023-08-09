@@ -43,7 +43,10 @@ def main():
     apod_info = get_apod_info(apod_id)
 
     # Set the APOD as the desktop background image
-    image_lib.set_desktop_background_image(apod_info['file_path'])
+    if apod_info is not None:
+        image_lib.set_desktop_background_image(apod_info['file_path'])
+    else:
+        return  None
 
 def get_apod_date():
     """Gets the APOD date
@@ -297,12 +300,15 @@ def get_apod_info(image_id):
 
     # Put information into a dictionary
     #Fill this out
-    apod_info = {
+    if query_result:
+        apod_info = {
         'title': query_result[0], 
         'explanation': query_result[1],
         'file_path': query_result[2],
     }
-    return apod_info
+        return apod_info
+    else:
+        return None
 
 def get_all_apod_titles():
     """Gets a list of the titles of all APODs in the image cache
